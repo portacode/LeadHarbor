@@ -2,7 +2,7 @@
 
 ## Deployment contract
 
-`portafile.yaml` targets a fresh Ubuntu 24.04 managed device with systemd, 2 GB RAM,
+`portafile.yaml` targets a fresh Ubuntu managed device with systemd, 2 GB RAM,
 12 GB disk and an exposed HTTP origin on port 8080. Portacode supplies the public
 HTTPS tunnel. Root is used for package/service installation; web and analytics
 processes run as the dedicated `conversion` user. PostgreSQL uses local peer

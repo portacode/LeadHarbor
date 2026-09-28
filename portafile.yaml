@@ -1,4 +1,4 @@
-source_template: ubuntu-24.04
+source_template: ubuntu
 name: LeadHarbor
 hostname: leadharbor
 username: root
