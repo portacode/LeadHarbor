@@ -1,0 +1,14 @@
+{% load static %}<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}{{ site.name }} · {{ site.tagline }}{% endblock %}</title>
+<meta name="description" content="{{ site.description|truncatechars:155 }}"><meta name="theme-color" content="{{ site.primary_color }}">
+<meta property="og:title" content="{{ site.name }}"><meta property="og:description" content="{{ site.tagline }}">
+<link rel="stylesheet" href="{% static 'website/site.css' %}"><style>:root{--brand:{{ site.primary_color }}}</style>
+{% block head %}{% endblock %}</head><body data-analytics-mode="{{ site.analytics_mode }}">
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav wrap"><a class="brand" href="/">{% if site.logo %}<img src="{% url 'website:brand' 'logo' %}" alt="{{ site.name }}" width="140" height="44">{% else %}<span class="brand-mark" aria-hidden="true">✳</span>{{ site.name }}{% endif %}</a><nav aria-label="Main navigation"><a href="/#approach">Our approach</a><a class="button small" href="/#contact" data-track="nav_cta">{{ site.cta_label }} <span aria-hidden="true">↗</span></a></nav></header>
+<main id="main">{% block content %}{% endblock %}</main>
+<footer class="wrap footer"><a class="brand" href="/">{{ site.name }}</a><p>A little clarity. A meaningful next step.</p><div>{% if site.contact_email %}<a href="mailto:{{ site.contact_email }}">Contact</a>{% endif %}<a href="{% url 'website:privacy' %}">Privacy</a><button type="button" class="text-button" id="privacy-settings">Cookie preferences</button></div></footer>
+<div id="consent-banner" class="consent" hidden role="region" aria-label="Analytics preferences"><div><strong>A little insight helps us improve.</strong><p>Allow first-party visit and interaction analytics? Your form works either way. <a href="/privacy/">What we collect</a></p></div><div class="consent-actions"><button class="button" id="accept-analytics">Allow analytics</button><button class="button secondary" id="decline-analytics">No thanks</button></div></div>
+<form hidden>{% csrf_token %}</form><script src="{% static 'website/analytics.js' %}" defer></script>
+</body></html>

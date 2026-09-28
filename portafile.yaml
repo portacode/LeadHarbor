@@ -1,0 +1,100 @@
+source_template: ubuntu-24.04
+name: LeadHarbor
+hostname: leadharbor
+username: root
+resources:
+  disk_gib: 12
+  ram_mib: 2048
+  cpus: 1
+project_paths:
+  - /opt/LeadHarbor
+# Required for the optional post-provision Codex customization step.
+requires_codex_connection: true
+task_name: Launch your conversion website
+inputs:
+  - id: business_name
+    type: text
+    label: Business name
+    required: false
+    default: Your business
+  - id: tagline
+    type: text
+    label: Short brand tagline
+    required: false
+  - id: headline
+    type: text
+    label: Main headline
+    required: false
+  - id: description
+    type: textarea
+    label: What do you offer, and who is it for?
+    required: false
+  - id: logo_file
+    type: image
+    label: Your logo (optional)
+    required: false
+    accept: image/png,image/jpeg,image/webp
+    allowed_types: [image/png, image/jpeg, image/webp]
+    save: false
+  - id: hero_image
+    type: image
+    label: Brand or product photo (optional)
+    required: false
+    accept: image/png,image/jpeg,image/webp
+    allowed_types: [image/png, image/jpeg, image/webp]
+    save: false
+  - id: primary_color
+    type: color
+    label: Brand color
+    required: false
+    default: '#31594f'
+  - id: conversion_mode
+    type: select
+    label: How should visitors convert?
+    required: false
+    default: form
+    options:
+      - {value: form, label: Contact or quote request}
+      - {value: booking, label: Request a booking (team confirms availability)}
+      - {value: external, label: Open an external booking calendar}
+  - id: booking_url
+    type: url
+    label: Booking calendar URL (required only for external calendar mode)
+    required: false
+  - id: contact_email
+    type: email
+    label: Public business contact email
+    required: false
+  - id: telegram_bot_token
+    type: secret
+    label: Telegram bot token (optional; connect a staff chat after launch)
+    required: false
+    save: false
+  - id: ai_prompt
+    type: textarea
+    label: Let AI tailor your website (optional)
+    description: Describe your business, desired style, customer journey, form questions, and conversion metrics. Codex implements this after the base site is provisioned.
+    required: false
+    save: false
+expose_ports:
+  - 8080
+instructions:
+  - run: >-
+      apt-get update -qq && apt-get install -y git &&
+      if [ ! -d /opt/LeadHarbor/.git ]; then
+      git clone https://github.com/portacode/LeadHarbor.git /opt/LeadHarbor;
+      fi
+    timeout: 600
+  - run: bash /opt/LeadHarbor/scripts/provision.sh
+    timeout: 1200
+  - run: /opt/LeadHarbor/.venv/bin/python /opt/LeadHarbor/scripts/customize.py
+    timeout: 2100
+  - run: bash /opt/LeadHarbor/scripts/finalize.sh
+    timeout: 900
+  - wait_for: https://[exposed:8080]/health/
+    timeout: 120
+on_success: notify
+on_failure: notify
+metadata:
+  category: business
+  description: A branded conversion website with Django admin, first-party analytics, Telegram journeys and optional AI customization.

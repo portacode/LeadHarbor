@@ -1,0 +1,14 @@
+{% extends 'unfold/layouts/base_simple.html' %}
+{% load i18n %}
+{% block breadcrumbs %}{% endblock %}
+{% block title %}Business overview{% endblock %}
+{% block content %}
+<div class="mb-8"><p class="text-sm text-base-500">YOUR BUSINESS AT A GLANCE · LAST 30 DAYS</p><h1 class="text-3xl font-semibold mt-2">Make every conversation count.</h1><p class="mt-3 text-base-500">Follow the journey from first impression to a meaningful next step.</p></div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<div class="border border-base-200 dark:border-base-800 rounded-default p-6"><p>Tracked sessions</p><strong class="text-4xl">{{ session_count }}</strong></div>
+<div class="border border-base-200 dark:border-base-800 rounded-default p-6"><p>Conversion rate</p><strong class="text-4xl">{{ conversion_rate }}%</strong></div>
+<div class="border border-base-200 dark:border-base-800 rounded-default p-6"><p>New requests to follow up</p><strong class="text-4xl">{{ new_requests }}</strong></div>
+</div><div class="flex flex-wrap gap-4 mb-8"><a class="bg-primary-600 text-white rounded-default px-5 py-3" href="/dashboard/">Explore visitor journeys ↗</a><a class="border rounded-default px-5 py-3" href="/admin/website/submission/">Request inbox</a><a class="border rounded-default px-5 py-3" href="/admin/website/sitesettings/1/change/">Edit your website</a><a class="border rounded-default px-5 py-3" href="/">View website</a></div>
+<p class="mb-6 text-base-500">Analytics covers consenting visitors. {{ unattributed_count }} additional requests arrived without journey tracking in the last 30 days.</p>
+{% include 'admin/app_list.html' with app_list=app_list show_changelinks=True %}
+{% endblock %}
